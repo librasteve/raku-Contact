@@ -37,14 +37,13 @@ role Address::Grammar::Base {
     token whole-line {
         ^^ \V* $$
     }
-    token house   { <whole-line> }
     token town    { <whole-line> }
     token city    { <whole-line> }
     token county  { <whole-line> }
     token country { <whole-line> }
 }
 
-#`[
+#[
 grammar AddressUSA::Grammar does Address::Grammar::Base {
     token TOP {
           <street>    \v
@@ -78,11 +77,11 @@ class AddressUSA::Actions {
     method TOP($/) {
         my %a;
 
-        %a<street>   = $<street>.made;
-        %a<city>     = $<city>.made;
-        %a<state>    = $<state-zip><state>.made;
-        %a<zipcode>  = $<state-zip><zipcode>.made;
-        %a<country>  = $<country>.made;
+        %a<street>   = $_ with $<street>.made;
+        %a<city>     = $_ with $<city>.made;
+        %a<state>    = $_ with $<state-zip><state>.made;
+        %a<zipcode>  = $_ with $<state-zip><zipcode>.made;
+        %a<country>  = $_ with $<country>.made;
 
         make AddressUSA.new: |%a
     }
@@ -115,7 +114,7 @@ ddt $match.made;
 
 #]
 
-
+#`[
 grammar AddressUK::Grammar does Address::Grammar::Base {
     token TOP {
           <house-street> \v
@@ -128,6 +127,10 @@ grammar AddressUK::Grammar does Address::Grammar::Base {
     token house-street {
       ^^[ <house>        \v  ]?
           <street>              $$
+    }
+
+    token house {
+        <plain-words>
     }
 
     token postcode {
@@ -147,12 +150,12 @@ class AddressUK {
 class AddressUK::Actions {
     method TOP($/) {
         my %a;
-        %a<house>    = $<house-street><house>.made;
-        %a<street>   = $<house-street><street>.made;
-        %a<town>     = $<town>.made;
-        %a<county>   = $<county>.made;
-        %a<postcode> = $<postcode>.made;
-        %a<country>  = $<country>.made;
+        %a<house>    = $_ with $<house-street><house>.made;
+        %a<street>   = $_ with $<house-street><street>.made;
+        %a<town>     = $_ with $<town>.made;
+        %a<county>   = $_ with $<county>.made;
+        %a<postcode> = $_ with $<postcode>.made;
+        %a<country>  = $_ with $<country>.made;
 
         make AddressUK.new: |%a
     }
@@ -165,13 +168,12 @@ class AddressUK::Actions {
     method country($/)  { make ~$/ }
 }
 
-#Greenwich Cottage
 $address = q:to/END/;
+Greenwich Cottage
 123 Tokers Green Lane
 Kidmore End
 Reading
 RG4 9AY
-UK
 END
 
 #Oxon
@@ -181,11 +183,12 @@ $address ~~ s:g/<['\-%]>//;     # strip other punct
 $address .= chomp;              # strip final \n
 
 $match = AddressUK::Grammar.parse($address, :actions(AddressUK::Actions));
+#$match = AddressUK::Grammar.parse($address);
 
 #say ~$match;
 #say $match;
 ddt $match.made;
-
+#]
 
 
 
