@@ -3,7 +3,7 @@ use v6.d;
 
 use lib '../lib';
 use Data::Dump::Tree;
-use Grammar::Tracer;
+#use Grammar::Tracer;
 
 #use Contact;
 #
@@ -14,33 +14,34 @@ my ($address,$match);
 my @street-types = <Street St Avenue Ave Av Road Rd Lane Ln Boulevard Blvd>;
 
 role Address::Grammar::Base {
+    token street {
+        ^^ [<number> ','? <.ws>]? <plain-words> <.ws> <street-type> '.'? $$
+    }
+
     token number {
         \d*
-    }
-
-    token street-type {
-        @street-types
-    }
-
-    token plain-word {
-        \w+  <?{ "$/" !~~ /@street-types/ }>
     }
 
     token plain-words {
         <plain-word>+ % \h
     }
 
-    token street {
-        ^^ [<number> ','? <.ws>]? <plain-words> <.ws> <street-type> '.'? $$
+    token plain-word {
+        \w+  <?{ "$/" !~~ /@street-types/ }>
     }
 
-    token whole-line {
-        ^^ \V* $$
+    token street-type {
+        @street-types
     }
+
     token town    { <whole-line> }
     token city    { <whole-line> }
     token county  { <whole-line> }
     token country { <whole-line> }
+
+    token whole-line {
+        ^^ \V* $$
+    }
 }
 
 #[
