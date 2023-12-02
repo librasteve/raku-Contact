@@ -3,7 +3,7 @@ use v6.d;
 
 use lib '../lib';
 use Data::Dump::Tree;
-use Grammar::Tracer;
+#use Grammar::Tracer;
 
 #use Contact;
 #
@@ -104,7 +104,6 @@ $address ~~ s:g/','$$//;
 $address ~~ s:g/<['\-%]>//;
 $address .= chomp;
 
-#$match = AddressUSA::Grammar.parse($address);
 $match = AddressUSA::Grammar.parse($address, :actions(AddressUSA::Actions));
 
 #say ~$match;
@@ -112,7 +111,7 @@ $match = AddressUSA::Grammar.parse($address, :actions(AddressUSA::Actions));
 ddt $match.made;
 #]
 
-#`[
+#[
 grammar AddressUK::Grammar does Address::Grammar::Base {
     token TOP {
         [ <house>        \v  ]?
@@ -179,7 +178,6 @@ $address ~~ s:g/<['\-%]>//;     # strip other punct
 $address .= chomp;              # strip final \n
 
 $match = AddressUK::Grammar.parse($address, :actions(AddressUK::Actions));
-#$match = AddressUK::Grammar.parse($address);
 
 #say ~$match;
 #say $match;
