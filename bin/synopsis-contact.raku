@@ -44,6 +44,8 @@ role Address::Grammar::Base {
     }
 }
 
+#----------------------
+
 #[
 grammar AddressUSA::Grammar does Address::Grammar::Base {
     token TOP {
@@ -105,11 +107,10 @@ $address ~~ s:g/<['\-%]>//;
 $address .= chomp;
 
 $match = AddressUSA::Grammar.parse($address, :actions(AddressUSA::Actions));
-
-#say ~$match;
-#say $match;
 ddt $match.made;
 #]
+
+#----------------------
 
 #[
 grammar AddressUK::Grammar does Address::Grammar::Base {
@@ -163,6 +164,7 @@ class AddressUK::Actions {
     method country($/)  { make ~$/ }
 }
 
+
 $address = q:to/END/;
 Greenwich Cottage
 123 Tokers Green Lane
@@ -178,11 +180,6 @@ $address ~~ s:g/<['\-%]>//;     # strip other punct
 $address .= chomp;              # strip final \n
 
 $match = AddressUK::Grammar.parse($address, :actions(AddressUK::Actions));
-
-#say ~$match;
-#say $match;
 ddt $match.made;
 #]
-
-
 
