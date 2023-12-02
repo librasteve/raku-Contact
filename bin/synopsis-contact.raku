@@ -9,7 +9,7 @@ use Data::Dump::Tree;
 #
 #ddt my $contact = Contact::Parse.new($text);
 
-my ($address,$match);
+my ($address, $match);
 
 my @street-types = <Street St Avenue Ave Av Road Rd Lane Ln Boulevard Blvd>;
 
@@ -19,7 +19,7 @@ role Address::Grammar::Base {
     }
 
     token number {
-        \d*
+        \d ** 1..5
     }
 
     token plain-words {
@@ -27,7 +27,7 @@ role Address::Grammar::Base {
     }
 
     token plain-word {
-        \w+  <?{ "$/" !~~ /@street-types/ }>
+        \w+  <?{ $/ ne @street-types.any }>
     }
 
     token street-type {
@@ -49,19 +49,15 @@ grammar AddressUSA::Grammar does Address::Grammar::Base {
     token TOP {
           <street>    \v
           <city>      \v
-          <state-zip> \v?
+          <state> <.ws> <zip> \v?    #<.ws> is [\h* | \v]
         [ <country>   \v? ]?
-    }
-
-    token state-zip {
-        ^^  <state> <.ws>? <zipcode> $$    #<.ws> is [\h* | \v]
     }
 
     token state {
         \w \w
     }
 
-    token zipcode {
+    token zip {
         \d ** 5
     }
 }
@@ -70,7 +66,7 @@ class AddressUSA {
     has Str $.street;
     has Str $.city;
     has Str $.state;
-    has Str $.zipcode;
+    has Str $.zip;
     has Str $.country = 'USA';
 }
 
@@ -80,8 +76,8 @@ class AddressUSA::Actions {
 
         %a<street>   = $_ with $<street>.made;
         %a<city>     = $_ with $<city>.made;
-        %a<state>    = $_ with $<state-zip><state>.made;
-        %a<zipcode>  = $_ with $<state-zip><zipcode>.made;
+        %a<state>    = $_ with $<state>.made;
+        %a<zip>      = $_ with $<zip>.made;
         %a<country>  = $_ with $<country>.made;
 
         make AddressUSA.new: |%a
@@ -90,7 +86,7 @@ class AddressUSA::Actions {
     method street($/)   { make ~$/ }
     method city($/)     { make ~$/ }
     method state($/)    { make ~$/ }
-    method zipcode($/)  { make ~$/ }
+    method zip($/)  { make ~$/ }
     method country($/)  { make ~$/ }
 }
 
@@ -109,7 +105,7 @@ $address .= chomp;
 #$match = AddressUSA::Grammar.parse($address);
 $match = AddressUSA::Grammar.parse($address, :actions(AddressUSA::Actions));
 
-say ~$match;
+#say ~$match;
 #say $match;
 ddt $match.made;
 

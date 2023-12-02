@@ -1,7 +1,7 @@
 use Grammar::Tracer;
 
 
-role Contact::Parse is Contact {
+class Contact::Parse is Contact {
     grammar Contact::Parse::Grammar {
         token TOP {
             <dt=rfc3339-date> | <dt=rfc1123-date> | <dt=rfc850-date> | <dt=rfc850-var-date> | <dt=rfc850-var-date-two> |
