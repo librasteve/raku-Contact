@@ -3,7 +3,7 @@ use v6.d;
 
 use lib '../lib';
 use Data::Dump::Tree;
-#use Grammar::Tracer;
+use Grammar::Tracer;
 
 #use Contact;
 #
@@ -68,17 +68,19 @@ class AddressUSA {
     has Str $.state;
     has Str $.zip;
     has Str $.country = 'USA';
+
+    method get-attrs {
+        <street city state zip country>
+    }
 }
 
 class AddressUSA::Actions {
     method TOP($/) {
-        my %a;
 
-        %a<street>   = $_ with $<street>.made;
-        %a<city>     = $_ with $<city>.made;
-        %a<state>    = $_ with $<state>.made;
-        %a<zip>      = $_ with $<zip>.made;
-        %a<country>  = $_ with $<country>.made;
+        my %a;
+        for AddressUSA.get-attrs {
+            %a{$^key} = $_ with $/{$^key}.made;
+        }
 
         make AddressUSA.new: |%a
     }
@@ -86,7 +88,7 @@ class AddressUSA::Actions {
     method street($/)   { make ~$/ }
     method city($/)     { make ~$/ }
     method state($/)    { make ~$/ }
-    method zip($/)  { make ~$/ }
+    method zip($/)      { make ~$/ }
     method country($/)  { make ~$/ }
 }
 
@@ -108,22 +110,17 @@ $match = AddressUSA::Grammar.parse($address, :actions(AddressUSA::Actions));
 #say ~$match;
 #say $match;
 ddt $match.made;
-
 #]
 
 #`[
 grammar AddressUK::Grammar does Address::Grammar::Base {
     token TOP {
-          <house-street> \v
+        [ <house>        \v  ]?
+          <street>       \v
           <town>         \v
         [ <county>       \v  ]?
           <postcode>     \v?
         [ <country>      \v? ]?
-    }
-
-    token house-street {
-      ^^[ <house>        \v  ]?
-          <street>              $$
     }
 
     token house {
@@ -142,22 +139,24 @@ class AddressUK {
     has Str $.county;
     has Str $.postcode;
     has Str $.country = 'UK';
+
+    method get-attrs {
+        <house street town county postcode country>
+    }
 }
 
 class AddressUK::Actions {
     method TOP($/) {
+
         my %a;
-        %a<house>    = $_ with $<house-street><house>.made;
-        %a<street>   = $_ with $<house-street><street>.made;
-        %a<town>     = $_ with $<town>.made;
-        %a<county>   = $_ with $<county>.made;
-        %a<postcode> = $_ with $<postcode>.made;
-        %a<country>  = $_ with $<country>.made;
+        for AddressUK.get-attrs {
+            %a{$^key} = $_ with $/{$^key}.made;
+        }
 
         make AddressUK.new: |%a
     }
 
-    method house($/)    { make ~$/ }   #iamerejh what if drop house / country
+    method house($/)    { make ~$/ }
     method street($/)   { make ~$/ }
     method town($/)     { make ~$/ }
     method county($/)   { make ~$/ }
