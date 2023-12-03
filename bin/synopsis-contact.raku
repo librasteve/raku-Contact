@@ -3,94 +3,11 @@ use v6.d;
 
 use lib '../lib';
 use Data::Dump::Tree;
-#use Grammar::Tracer;
-
-#my @street-types = <Street St Avenue Ave Av Road Rd Lane Ln Boulevard Blvd>;
-#
-#role Address::Grammar::Base {
-#    token street {
-#        ^^ [<number> ','? <.ws>]? <plain-words> <.ws> <street-type> '.'? $$
-#    }
-#
-#    token number {
-#        \d ** 1..5
-#    }
-#
-#    token plain-words {
-#        <plain-word>+ % \h
-#    }
-#
-#    token plain-word {
-#        \w+  <?{ $/ ne @street-types.any }>
-#    }
-#
-#    token street-type {
-#        @street-types
-#    }
-#
-#    token town    { <whole-line> }
-#    token city    { <whole-line> }
-#    token county  { <whole-line> }
-#    token country { <whole-line> }
-#
-#    token whole-line {
-#        ^^ \V* $$
-#    }
-#}
-
-#----------------------
-
-#[
-#grammar AddressUSA::Grammar does Address::Grammar::Base {
-#    token TOP {
-#          <street>  \v
-#          <city>    \v
-#          <state> <.ws> <zip> \v?    #<.ws> is [\h* | \v]
-#        [ <country> \v? ]?
-#    }
-#
-#    token state {
-#        \w \w
-#    }
-#
-#    token zip {
-#        \d ** 5
-#    }
-#}
-
-#class AddressUSA {
-#    has Str $.street;
-#    has Str $.city;
-#    has Str $.state;
-#    has Str $.zip;
-#    has Str $.country = 'USA';
-#
-#    method get-attrs {
-#        <street city state zip country>
-#    }
-#}
-
-#class AddressUSA::Actions {
-#    method TOP($/) {
-#
-#        my %a;
-#        for AddressUSA.get-attrs {
-#            %a{$^key} = $_ with $/{$^key}.made;
-#        }
-#
-#        make AddressUSA.new: |%a
-#    }
-#
-#    method street($/)   { make ~$/ }
-#    method city($/)     { make ~$/ }
-#    method state($/)    { make ~$/ }
-#    method zip($/)      { make ~$/ }
-#    method country($/)  { make ~$/ }
-#}
-
-use Contact::Address::Parse;
 
 my ($address, $match);
+
+#`[
+use Contact::Address::Parse;
 
 $address = q:to/END/;
 123, Main St.,
@@ -99,19 +16,47 @@ IL 62704
 USA
 END
 
-
-
-
 $match = Contact::Address::Parse.new($address);
-
-#$match = AddressUSA::Grammar.parse($address, :actions(AddressUSA::Actions));
-
 ddt $match;
 #]
 
+
 #----------------------
 
-#`[
+#[
+my @street-types = <Street St Avenue Ave Av Road Rd Lane Ln Boulevard Blvd>;
+
+role Address::Grammar::Base {
+    token street {
+        ^^ [<number> ','? <.ws>]? <plain-words> <.ws> <street-type> '.'? $$
+    }
+
+    token number {
+        \d ** 1..5
+    }
+
+    token plain-words {
+        <plain-word>+ % \h
+    }
+
+    token plain-word {
+        \w+  <?{ $/ ne @street-types.any }>
+    }
+
+    token street-type {
+        @street-types
+    }
+
+    token town    { <whole-line> }
+    token city    { <whole-line> }
+    token county  { <whole-line> }
+    token country { <whole-line> }
+
+    token whole-line {
+        ^^ \V* $$
+    }
+}
+
 grammar AddressUK::Grammar does Address::Grammar::Base {
     token TOP {
         [ <house>        \v  ]?
