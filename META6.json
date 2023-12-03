@@ -14,6 +14,7 @@
   ],
   "provides": {
     "Contact": "lib/Contact.rakumod",
+    "Contact::Address": "lib/Contact/Address.rakumod",
     "DateTime::Parse": "lib/DateTime/Parse.rakumod"
   },
   "support": {
