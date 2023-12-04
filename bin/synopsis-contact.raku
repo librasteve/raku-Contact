@@ -9,7 +9,6 @@ my ($address, $match);
 #[
 #use Contact;
 use Contact::Address;
-#use Contact::Address::Parse;
 
 $address = q:to/END/;
 123, Main St.,
@@ -18,7 +17,7 @@ IL 62704
 USA
 END
 
-ddt Contact::AddressFactory['USA'].new;
+ddt Contact::AddressFactory['USA'].new.parse: $address;
 #ddt Contact::Address::USA.new;
 
 #$match = Contact::Address::Parse.new($address);
