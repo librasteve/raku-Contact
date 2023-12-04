@@ -7,6 +7,7 @@ use Data::Dump::Tree;
 my ($address, $match);
 
 #[
+#use Contact;
 use Contact::Address;
 #use Contact::Address::Parse;
 
@@ -17,7 +18,7 @@ IL 62704
 USA
 END
 
-ddt Contact::Address['USA'].new;
+ddt Contact::AddressFactory['USA'].new;
 #ddt Contact::Address::USA.new;
 
 #$match = Contact::Address::Parse.new($address);

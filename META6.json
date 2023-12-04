@@ -14,9 +14,11 @@
   "test-depends": [],
   "provides": {
     "Contact": "lib/Contact.rakumod",
-    "Contact::Parse": "lib/Contact/Parse.rakumod",
     "Contact::Address": "lib/Contact/Address.rakumod",
-    "Contact::Address::Parse": "lib/Contact/Address/Parse.rakumod"
+    "Contact::Address::Parse": "lib/Contact/Address/Parse.rakumod",
+    "Contact::Address::UK": "lib/Contact/Address/UK.rakumod",
+    "Contact::Address::USA": "lib/Contact/Address/USA.rakumod",
+    "Contact::Parse": "lib/Contact/Parse.rakumod"
   },
   "resources": [],
   "license": "Artistic-2.0",
