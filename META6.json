@@ -1,26 +1,31 @@
 {
-  "name": "DateTime::Parse",
-  "description": "DateTime parser",
-  "version": "0.9.3",
-  "perl": "6.*",
+  "name": "Contact",
+  "description": "Contact, Address, Name, etc Parsing",
+  "version": "0.0.1",
+  "perl": "6.d",
   "authors": [
-    "Filip Sergot"
+    "librasteve"
   ],
-  "auth": "github:sergot",
-  "depends": [],
+  "auth": "zef:librasteve",
+  "depends": [
+    "Data::Dump::Tree"
+  ],
   "build-depends": [],
-  "test-depends": [
-    "Test"
-  ],
+  "test-depends": [],
   "provides": {
     "Contact": "lib/Contact.rakumod",
+    "Contact::Parse": "lib/Contact/Parse.rakumod",
     "Contact::Address": "lib/Contact/Address.rakumod",
-    "DateTime::Parse": "lib/DateTime/Parse.rakumod"
+    "Contact::Address::Parse": "lib/Contact/Address/Parse.rakumod"
   },
-  "support": {
-    "bugtracker": "https://github.com/sergot/datetime-parse/issues",
-    "source": "git://github.com/sergot/datetime-parse.git"
-  },
-  "source-url": "git://github.com/sergot/datetime-parse.git",
-  "raku": "6.*"
+  "resources": [],
+  "license": "Artistic-2.0",
+  "tags": [
+    "Contact",
+    "Address",
+    "Name",
+    "Parse"
+  ],
+  "api": "1",
+  "source-url": "git://github.com/librasteve/raku-Contact.git"
 }
