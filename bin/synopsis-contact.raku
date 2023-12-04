@@ -6,8 +6,9 @@ use Data::Dump::Tree;
 
 my ($address, $match);
 
-#`[
-use Contact::Address::Parse;
+#[
+use Contact::Address;
+#use Contact::Address::Parse;
 
 $address = q:to/END/;
 123, Main St.,
@@ -16,14 +17,17 @@ IL 62704
 USA
 END
 
-$match = Contact::Address::Parse.new($address);
-ddt $match;
+ddt Contact::Address['USA'].new;
+#ddt Contact::Address::USA.new;
+
+#$match = Contact::Address::Parse.new($address);
+#ddt $match;
 #]
 
 
 #----------------------
 
-#[
+#`[
 my @street-types = <Street St Avenue Ave Av Road Rd Lane Ln Boulevard Blvd>;
 
 role Address::Grammar::Base {
