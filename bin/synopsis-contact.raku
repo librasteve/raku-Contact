@@ -7,7 +7,7 @@ use Data::Dump::Tree;
 #use Contact;
 use Contact::Address;
 
-my ($address, $match, $ao);
+my $address;
 
 #[
 $address = q:to/END/;
@@ -17,10 +17,7 @@ IL 62704
 USA
 END
 
-$ao = Contact::AddressFactory['USA'].new.parse: $address;
-ddt $ao;
-say $ao ~~ Address;
-say $ao.^name;
+ddt AddressFactory['USA'].new.parse: $address;
 #]
 
 #[
@@ -34,9 +31,6 @@ END
 
 #Oxon
 
-$ao = Contact::AddressFactory['UK'].new.parse: $address;
-ddt $ao;
-say $ao ~~ Address;
-say $ao.^name;
+ddt AddressFactory['UK'].new.parse: $address;
 #]
 

@@ -2,7 +2,6 @@ use Contact::Address::GrammarBase;
 
 #use Grammar::Tracer;
 class Contact::Address::USA::Parse {
-    my @attrs = <street city state zip country>;
 
     grammar Grammar does Contact::Address::GrammarBase {
         token TOP {
@@ -23,12 +22,12 @@ class Contact::Address::USA::Parse {
 
     class Actions {
         method TOP($/) {
-            my %a;
+            my @attrs = <street city state zip country>;
 
+            my %a;
             for @attrs {
                 %a{$^key} = $_ with $/{$^key}.made
             }
-
             make %a
         }
 
@@ -40,10 +39,10 @@ class Contact::Address::USA::Parse {
     }
 
     method new(Str $address is rw, :$rule = 'TOP') {
-        prep $address;
 
-        Grammar.parse($address, :$rule, :actions(Actions));
-#            or X::Contact::Address::CannotParse.new( invalid-str => $address ).throw;
+        Grammar.parse(prep($address), :$rule, :actions(Actions))
+            or X::Contact::Address::CannotParse.new( invalid-str => $address ).throw;
+
         $/.made
     }
 }

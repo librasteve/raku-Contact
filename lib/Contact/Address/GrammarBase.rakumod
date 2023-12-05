@@ -1,5 +1,3 @@
-our @street-types = <Street St Avenue Ave Av Road Rd Lane Ln Boulevard Blvd>;
-
 sub prep($address is rw) is export {
     $address ~~ s:g/','$$//;
     $address ~~ s:g/<['\-%]>//;
@@ -8,6 +6,9 @@ sub prep($address is rw) is export {
 }
 
 role Contact::Address::GrammarBase {
+    ### Anglophile
+    my @street-types = <Street St Avenue Ave Av Road Rd Lane Ln Boulevard Blvd>;
+
     token street {
         ^^ [<number> ','? <.ws>]? <plain-words> <.ws> <street-type> '.'? $$
     }

@@ -1,8 +1,7 @@
-#class X::Contact::Address::CannotParse is Exception {
-#    has $.invalid-str;
-#    method message() { "Unable to parse {$!invalid-str}" }
-#}
-#iamerejh
+class X::Contact::Address::CannotParse is Exception {
+    has $.invalid-str;
+    method message() { "Unable to parse {$!invalid-str}" }
+}
 
 
 role Contact::Address is export {
