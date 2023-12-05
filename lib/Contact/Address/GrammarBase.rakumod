@@ -1,6 +1,6 @@
 sub prep($address is rw) is export {
     $address ~~ s:g/','$$//;
-    $address ~~ s:g/<['\-%]>//;
+    $address ~~ s:g/<['\%]>//;
     $address .= chomp;
     $address
 }
