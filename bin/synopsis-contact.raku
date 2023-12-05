@@ -4,33 +4,33 @@ use v6.d;
 use lib '../lib';
 use Data::Dump::Tree;
 
-#use Contact;
-use Contact::Address;
+use Contact;
 
-my $address;
+my $text;
 
-#[
-$address = q:to/END/;
+#`[
+$text = q:to/END/;
+John Doe,
 123, Main St.,
 Springfield,
 IL 62704
 USA
 END
 
-ddt AddressFactory['USA'].new.parse: $address;
+ddt Contact.new: :$text, country => 'USA';
 #]
 
 #[
-$address = q:to/END/;
-Greenwich Cottage
-123 Tokers Green Lane
-Kidmore End
-Reading
-RG4 9AY
+$text = q:to/END/;
+Dr.John Smith
+123 Main Street
+London
+SW1A 1AA
+UK
 END
 
 #Oxon
 
-ddt AddressFactory['UK'].new.parse: $address;
+ddt Contact.new: :$text, country => 'UK';
 #]
 

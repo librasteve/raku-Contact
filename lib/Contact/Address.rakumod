@@ -1,9 +1,3 @@
-class X::Contact::Address::CannotParse is Exception {
-    has $.invalid-str;
-    method message() { "Unable to parse {$!invalid-str}" }
-}
-
-
 role Contact::Address is export {
     method parse(Str $) {...}
 }
@@ -44,5 +38,3 @@ role Contact::AddressFactory[Str $country='USA'] is export {
         Contact::Address::{$country}.new
     }
 }
-
-

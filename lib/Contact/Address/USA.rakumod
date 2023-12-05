@@ -1,7 +1,11 @@
-use Contact::Address::GrammarBase;
+class X::Contact::Address::USA::CannotParse is Exception {
+    has $.invalid-str;
+    method message() { "Unable to parse {$!invalid-str}" }
+}
 
 #use Grammar::Tracer;
 class Contact::Address::USA::Parse {
+    use Contact::Address::GrammarBase;
 
     grammar Grammar does Contact::Address::GrammarBase {
         token TOP {
@@ -41,7 +45,7 @@ class Contact::Address::USA::Parse {
     method new(Str $address is rw, :$rule = 'TOP') {
 
         Grammar.parse(prep($address), :$rule, :actions(Actions))
-            or X::Contact::Address::CannotParse.new( invalid-str => $address ).throw;
+            or X::Contact::Address::USA::CannotParse.new( invalid-str => $address ).throw;
 
         $/.made
     }

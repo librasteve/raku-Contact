@@ -1,13 +1,18 @@
-use Contact::Address::GrammarBase;
+class X::Contact::Address::UK::CannotParse is Exception {
+    has $.invalid-str;
+    method message() { "Unable to parse {$!invalid-str}" }
+}
 
-#use Grammar::Tracer;
+use Grammar::Tracer;
 class Contact::Address::UK::Parse {
+    use Contact::Address::GrammarBase;
+
     grammar Grammar does Contact::Address::GrammarBase {
         token TOP {
           [ <house>        \v  ]?
             <street>       \v
             <town>         \v
-          [ <county>       \v  ]?
+          [ <county>       \v  ]?    #FIXME whole line no digits!
             <postcode>     \v?
           [ <country>      \v? ]?
         }
@@ -17,7 +22,7 @@ class Contact::Address::UK::Parse {
         }
 
         token postcode {
-            \w \w? \d \s* \d \w \w
+            \w \w? \w? \d \s* \d \w \w
         }
     }
 
@@ -44,7 +49,7 @@ class Contact::Address::UK::Parse {
     method new(Str $address is rw, :$rule = 'TOP') {
 
         Grammar.parse(prep($address), :$rule, :actions(Actions))
-                or X::Contact::Address::CannotParse.new( invalid-str => $address ).throw;
+                or X::Contact::Address::UK::CannotParse.new( invalid-str => $address ).throw;
 
         $/.made
     }
