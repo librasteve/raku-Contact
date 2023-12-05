@@ -2,9 +2,9 @@ use Contact::Address::GrammarBase;
 
 #use Grammar::Tracer;
 class Contact::Address::UK::Parse {
-    my @street-types = <Street St Avenue Ave Av Road Rd Lane Ln Boulevard Blvd>;
+    my @attrs = <house street town county postcode country>;
 
-    grammar Contact::Address::UK::Parse::Grammar does Contact::Address::GrammarBase {
+    grammar Grammar does Contact::Address::GrammarBase {
         token TOP {
           [ <house>        \v  ]?
             <street>       \v
@@ -23,14 +23,12 @@ class Contact::Address::UK::Parse {
         }
     }
 
-    class Contact::Address::UK::Parse::Actions {
+    class Actions {
         method TOP($/) {
-
             my %a;
 
-            for <house street town county postcode country> {
-#            for Contact::Address::UK.get-attrs {
-                %a{$^key} = $_ with $/{$^key}.made;
+            for @attrs {
+                %a{$^key} = $_ with $/{$^key}.made
             }
             make %a
         }
@@ -47,8 +45,7 @@ class Contact::Address::UK::Parse {
     method new(Str $address is rw, :$rule = 'TOP') {
         prep $address;
 
-        Contact::Address::UK::Parse::Grammar.parse($address, :$rule,
-                :actions(Contact::Address::UK::Parse::Actions));
+        Grammar.parse($address, :$rule, :actions(Actions));
 #                or X::Contact::Address::CannotParse.new( invalid-str => $address ).throw;
         $/.made
     }
