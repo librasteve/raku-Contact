@@ -17,7 +17,18 @@ IL 62704
 USA
 END
 
-ddt Contact::AddressFactory['USA'].new.parse: $address;
+#$address = q:to/END/;
+#Greenwich Cottage
+#123 Tokers Green Lane
+#Kidmore End
+#Reading
+#RG4 9AY
+#END
+
+my $ao = Contact::AddressFactory['USA'].new.parse: $address;
+ddt $ao;
+say $ao ~~ Address;
+say $ao.^name;
 #ddt Contact::Address::USA.new;
 
 #$match = Contact::Address::Parse.new($address);

@@ -1,3 +1,10 @@
+#class X::Contact::Address::CannotParse is Exception {
+#    has $.invalid-str;
+#    method message() { "Unable to parse {$!invalid-str}" }
+#}
+#iamerejh
+
+
 role Contact::Address is export {
     method get-attrs {...}
 
@@ -17,9 +24,9 @@ class Contact::Address::USA does Contact::Address is export {
 
     method parse($address is rw) {
         use Contact::Address::USA;
-        say 'yo';
 
-        Contact::Address::USA::Parse.new: $address
+        my %a = Contact::Address::USA::Parse.new($address);
+        self.new: |%a
     }
 }
 
@@ -35,8 +42,11 @@ class Contact::Address::UK does Contact::Address is export {
         <house street town county postcode country>
     }
 
-    method parse($address) {
-        say 'yo'
+    method parse($address is rw) {
+        use Contact::Address::UK;
+
+        my %a = Contact::Address::UK::Parse.new($address);
+        self.new: |%a
     }
 }
 
@@ -45,3 +55,4 @@ role Contact::AddressFactory[Str $country='USA'] is export {
         Contact::Address::{$country}.new
     }
 }
+

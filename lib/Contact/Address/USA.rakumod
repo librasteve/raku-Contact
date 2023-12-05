@@ -1,54 +1,45 @@
+use Contact::Address::GrammarBase;
+
+
+#role Contact::Address::GrammarBase {
+#    token street {
+#        ^^ [<number> ','? <.ws>]? <plain-words> <.ws> <street-type> '.'? $$
+#    }
+#
+#    token number {
+#        \d ** 1..5
+#    }
+#
+#    token plain-words {
+#        <plain-word>+ % \h
+#    }
+#
+#    token plain-word {
+#        \w+  <?{ $/ ne @street-types.any }>
+#    }
+#
+#    token street-type {
+#        @street-types
+#    }
+#
+#    token town    { <whole-line> }
+#    token city    { <whole-line> }
+#    token county  { <whole-line> }
+#    token country { <whole-line> }
+#
+#    token whole-line {
+#        ^^ \V* $$
+#    }
+#}
+
 #use Grammar::Tracer;
-
-#FIXME USA back in
-
-#use Contact::Address;
-
-my class X::Contact::Address::CannotParse is Exception {
-    has $.invalid-str;
-    method message() { "Unable to parse {$!invalid-str}" }
-}
-
-my @street-types = <Street St Avenue Ave Av Road Rd Lane Ln Boulevard Blvd>;
-
-role Contact::Address::Grammar::Base {
-    token street {
-        ^^ [<number> ','? <.ws>]? <plain-words> <.ws> <street-type> '.'? $$
-    }
-
-    token number {
-        \d ** 1..5
-    }
-
-    token plain-words {
-        <plain-word>+ % \h
-    }
-
-    token plain-word {
-        \w+  <?{ $/ ne @street-types.any }>
-    }
-
-    token street-type {
-        @street-types
-    }
-
-    token town    { <whole-line> }
-    token city    { <whole-line> }
-    token county  { <whole-line> }
-    token country { <whole-line> }
-
-    token whole-line {
-        ^^ \V* $$
-    }
-}
-
 class Contact::Address::USA::Parse {
-    grammar Contact::Address::Parse::Grammar does Contact::Address::Grammar::Base {
+    grammar Contact::Address::USA::Parse::Grammar does Contact::Address::GrammarBase {
         token TOP {
             <street>  \v
             <city>    \v
             <state> <.ws> <zip> \v?    #<.ws> is [\h* | \v]
-            [ <country> \v? ]?
+          [ <country> \v? ]?
         }
 
         token state {
@@ -60,15 +51,16 @@ class Contact::Address::USA::Parse {
         }
     }
 
-    class Contact::Address::Parse::Actions {
+    class Contact::Address::USA::Parse::Actions {
         method TOP($/) {
 
             my %a;
-            for Contact::Address::USA.get-attrs {
+            for <street city state zip country> {
+#            for Contact::Address::USA.get-attrs {
                 %a{$^key} = $_ with $/{$^key}.made;
             }
 
-            make Contact::Address::USA.new: |%a
+            make %a
         }
 
         method street($/)   { make ~$/ }
@@ -78,13 +70,12 @@ class Contact::Address::USA::Parse {
         method country($/)  { make ~$/ }
     }
 
-    method new(Str $text is rw, :$rule = 'TOP') {
-        $text ~~ s:g/','$$//;
-        $text ~~ s:g/<['\-%]>//;
-        $text .= chomp;
+    method new(Str $address is rw, :$rule = 'TOP') {
+        prep $address;
 
-        Contact::Address::Parse::Grammar.parse($text, :$rule, :actions(Contact::Address::Parse::Actions))
-            or X::Contact::Address::CannotParse.new( invalid-str => $text ).throw;
+        Contact::Address::USA::Parse::Grammar.parse($address, :$rule,
+                :actions(Contact::Address::USA::Parse::Actions));
+#            or X::Contact::Address::CannotParse.new( invalid-str => $address ).throw;
         $/.made
     }
 }
