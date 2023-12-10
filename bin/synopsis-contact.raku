@@ -14,24 +14,25 @@ John Doe,
 123, Main St.,
 Springfield,
 IL 62704
-USA
 END
 
-ddt Contact.new: :$text, country => 'USA';
+my $us-c = Contact.new: :$text, country => 'USA';
+#ddt $us-c;
+say ~$us-c;
 #]
 
 #[
 $text = q:to/END/;
 Dr. Jane Doe,
-Sleepy Cottage
-123, Badgemore Lane
-Henley-on-Thames
-Oxon
+Sleepy Cottage,
+123, Badgemore Lane,
+Henley-on-Thames,
+Oxon,
 RG9 2XX
 END
 
-#Oxon
-
-ddt Contact.new: :$text, country => 'UK';
+my $uk-c = Contact.new: :$text, country => 'UK';
+ddt $uk-c;
+say ~$uk-c;
 #]
 

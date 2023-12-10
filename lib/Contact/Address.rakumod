@@ -1,5 +1,6 @@
 role Contact::Address is export {
     method parse(Str $) {...}
+    method Str {...}
 }
 
 class Contact::Address::USA does Contact::Address is export {
@@ -14,6 +15,17 @@ class Contact::Address::USA does Contact::Address is export {
 
         my %a = Contact::Address::USA::Parse.new: $address;
         self.new: |%a
+    }
+
+    method Str {
+        my @lines = (
+            self.street,
+            self.city,
+            self.state ~ " " ~ self.zip,
+            self.country,
+        );
+
+        @@lines.join(",\n")
     }
 }
 
@@ -30,6 +42,19 @@ class Contact::Address::UK does Contact::Address is export {
 
         my %a = Contact::Address::UK::Parse.new: $address;
         self.new: |%a
+    }
+
+    method Str {
+        my @lines = (
+            self.house,
+            self.street,
+            self.town,
+            self.county,
+            self.postcode,
+            self.country,
+        );
+
+        @@lines.join(",\n")
     }
 }
 

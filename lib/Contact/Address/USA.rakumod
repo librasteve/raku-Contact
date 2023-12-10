@@ -9,18 +9,18 @@ class Contact::Address::USA::Parse {
 
     grammar Grammar does Contact::Address::GrammarBase {
         token TOP {
-            <street>  \v
-            <city>    \v
-            <state> <.ws> <zip> \v?    #<.ws> is [\h* | \v]
-          [ <country> \v? ]?
+                <street>  \v
+                <city>    \v
+                <state> <.ws> <zip> \v?    #<.ws> is [\h* | \v]
+              [ <country> \v? ]?
         }
 
         token state {
-            \w \w
+                \w \w
         }
 
         token zip {
-            \d ** 5
+                \d ** 5
         }
     }
 
@@ -43,10 +43,8 @@ class Contact::Address::USA::Parse {
     }
 
     method new(Str $address is rw, :$rule = 'TOP') {
-
         Grammar.parse(prep($address), :$rule, :actions(Actions))
             or X::Contact::Address::USA::CannotParse.new( invalid-str => $address ).throw;
-
         $/.made
     }
 }

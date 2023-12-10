@@ -9,20 +9,20 @@ class Contact::Address::UK::Parse {
 
     grammar Grammar does Contact::Address::GrammarBase {
         token TOP {
-          [ <house>        \v  ]?
-            <street>       \v
-            <town>         \v
-          [ <county>       \v  ]?
-            <postcode>     \v?
-          [ <country>      \v? ]?
+              [ <house>        \v  ]?
+                <street>       \v
+                <town>         \v
+              [ <county>       \v  ]?
+                <postcode>     \v?
+              [ <country>      \v? ]?
         }
 
         token house {
-            <plain-words>
+                <plain-words>
         }
 
         token postcode {
-            \w \w? \d \s* \d \w \w
+                \w [\w? | \d?]**2 <.ws>? \d \w \w
         }
     }
 
@@ -47,10 +47,8 @@ class Contact::Address::UK::Parse {
     }
 
     method new(Str $address is rw, :$rule = 'TOP') {
-
         Grammar.parse(prep($address), :$rule, :actions(Actions))
-                or X::Contact::Address::UK::CannotParse.new( invalid-str => $address ).throw;
-
+            or X::Contact::Address::UK::CannotParse.new( invalid-str => $address ).throw;
         $/.made
     }
 }
