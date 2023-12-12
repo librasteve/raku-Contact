@@ -3,7 +3,13 @@ role Contact::Address is export {
     method Str {...}
 }
 
-class Contact::Address::USA does Contact::Address is export {
+role Contact::AddressFactory[Str $country='USA'] is export {
+    method new {
+        Contact::Address::{$country}.new
+    }
+}
+
+class Contact::Address::USA does Contact::Address {
     has Str $.street;
     has Str $.city;
     has Str $.state;
@@ -25,11 +31,11 @@ class Contact::Address::USA does Contact::Address is export {
             self.country,
         );
 
-        @@lines.join(",\n")
+        @lines.join(",\n")
     }
 }
 
-class Contact::Address::UK does Contact::Address is export {
+class Contact::Address::UK does Contact::Address {
     has Str $.house;
     has Str $.street;
     has Str $.town;
@@ -54,12 +60,6 @@ class Contact::Address::UK does Contact::Address is export {
             self.country,
         );
 
-        @@lines.join(",\n")
-    }
-}
-
-role Contact::AddressFactory[Str $country='USA'] is export {
-    method new {
-        Contact::Address::{$country}.new
+        @lines.join(",\n")
     }
 }

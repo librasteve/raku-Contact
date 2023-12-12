@@ -17,7 +17,7 @@ IL 62704
 END
 
 my $us-c = Contact.new: :$text, country => 'USA';
-#ddt $us-c;
+ddt $us-c;
 say ~$us-c;
 #]
 
