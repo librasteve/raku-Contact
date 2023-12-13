@@ -16,8 +16,8 @@
     "Contact": "lib/Contact.rakumod",
     "Contact::Address": "lib/Contact/Address.rakumod",
     "Contact::Address::GrammarBase": "lib/Contact/Address/GrammarBase.rakumod",
-    "Contact::Address::UK": "lib/Contact/Address/UK.rakumod",
-    "Contact::Address::USA": "lib/Contact/Address/USA.rakumod"
+    "Contact::Address::UK::Parse": "lib/Contact/Address/UK/Parse.rakumod",
+    "Contact::Address::USA::Parse": "lib/Contact/Address/USA/Parse.rakumod"
   },
   "resources": [],
   "license": "Artistic-2.0",

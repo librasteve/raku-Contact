@@ -17,7 +17,8 @@ class Contact::Address::USA does Contact::Address {
     has Str $.country = 'USA';
 
     method parse($address is rw) {
-        use Contact::Address::USA;
+        #load lib/Contact/Address/USA/Parse.rakumod
+        use Contact::Address::USA::Parse;
 
         my %a = Contact::Address::USA::Parse.new: $address;
         self.new: |%a
@@ -44,7 +45,8 @@ class Contact::Address::UK does Contact::Address {
     has Str $.country = 'UK';
 
     method parse($address is rw) {
-        use Contact::Address::UK;
+        #load lib/Contact/Address/UK/Parse.rakumod
+        use Contact::Address::UK::Parse;
 
         my %a = Contact::Address::UK::Parse.new: $address;
         self.new: |%a
