@@ -1,0 +1,53 @@
+use v6.d;
+use Test;
+
+say 'yo';
+
+my $addresses = q:to/END/;
+123, Main St.,
+Springfield,
+IL 62704,
+USA
+
+123, Main St.,
+Springfield,
+IL 62704
+
+123, Main St.,
+Springfield,
+IL
+62704
+
+405 Union Ave.
+Middle Village, NY 11379
+
+47 Nichols St.
+West Warwick, RI 02893
+
+916 Oak Valley Ave.
+Branford, CT 06405
+
+259 Sleepy Hollow Street
+Key West, FL 33040
+
+9340 Golf Lane
+Elyria, OH 44035
+
+7 Woodsman Street
+Monsey, NY 10952
+
+12 Bank Ave.
+West Hempstead, NY 11552
+
+38 Smoky Hollow Street
+Oxford, MS 38655
+END
+
+my @addresses = $addresses.split(/\n\n+/);
+
+for @addresses -> $address {
+    say $address.trim;
+    say '---';
+}
+
+done-testing;

@@ -1,0 +1,56 @@
+use v6.d;
+use Test;
+
+say 'yo';
+
+my $addresses = q:to/END/;
+Sleepy Cottage,
+123, Badgemore Lane,
+Henley-on-Thames,
+Oxon,
+RG9 2XX
+UK
+
+123, Badgemore Lane,
+Henley-on-Thames,
+Oxon,
+RG9 2XX
+
+Sleepy Cottage,
+Badgemore Lane,
+Henley-on-Thames,
+Oxon, RG9 2XX
+
+39 George Street
+Dorchester DT0 8QL
+
+69 New Street
+Slough
+SL22 5ZL
+
+50 High Street
+Taunton
+TA43 5VW
+
+71 Windsor Road
+Ipswich
+IP31 1RY
+
+12 Richmond Road
+Kirkcaldy
+KY34 6CS
+Scotland
+
+88 Kingsway
+London
+WC50 8KD
+END
+
+my @addresses = $addresses.split(/\n\n+/);
+
+for @addresses -> $address {
+    say $address.trim;
+    say '---';
+}
+
+done-testing;
