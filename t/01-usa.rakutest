@@ -1,6 +1,9 @@
 use v6.d;
 use Test;
 
+use lib '../lib';
+use Contact::Address;
+
 say 'yo';
 
 my $addresses = q:to/END/;
@@ -17,7 +20,9 @@ IL 62704
 Springfield,
 IL
 62704
+END
 
+#`[
 405 Union Ave.
 Middle Village, NY 11379
 
@@ -41,12 +46,24 @@ West Hempstead, NY 11552
 
 38 Smoky Hollow Street
 Oxford, MS 38655
+
+#3 8 East 12th Street
+New York
+NY
+10003
+United States ofAmerica
 END
+#]
 
 my @addresses = $addresses.split(/\n\n+/);
 
-for @addresses -> $address {
+for @addresses -> $address is rw {
     say $address.trim;
+
+    my $res;
+
+    lives-ok {$res = AddressFactory['USA'].new.parse: $address} ,  'lives-ok';
+    say $res;
     say '---';
 }
 

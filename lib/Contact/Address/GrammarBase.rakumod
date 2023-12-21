@@ -29,8 +29,9 @@ role Contact::Address::GrammarBase {
         @street-types
     }
 
+    token city    { <whole-line> }   #iamerejh
+
     token town    { <whole-line> }
-    token city    { <whole-line> }
     token county  { <whole-line> }
     token country { <whole-line> }
 

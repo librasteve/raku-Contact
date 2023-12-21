@@ -3,15 +3,16 @@ class X::Contact::Address::USA::CannotParse is Exception {
     method message() { "Unable to parse {$!invalid-str}" }
 }
 
-#use Grammar::Tracer;
+use Grammar::Tracer;
 class Contact::Address::USA::Parse {
     use Contact::Address::GrammarBase;
 
     grammar Grammar does Contact::Address::GrammarBase {
         token TOP {
                 <street>  \v
-                <city>    \v
-                <state> <.ws> <zip> \v?    #<.ws> is [\h* | \v]
+#                <city>    \v
+#                <state> <.ws> <zip> \v?    #<.ws> is [\h* | \v]
+                <city> <.ws> <state> <.ws> <zip> \v?    #<.ws> is [\h* | \v]
               [ <country> \v? ]?
         }
 
