@@ -1,3 +1,5 @@
+### common roles for Contact::Address classes ###
+
 role Contact::Address is export {
     method parse(Str $) {...}
 
@@ -25,6 +27,8 @@ role Contact::AddressFactory[Str $country='USA'] is export {
         Contact::Address::{$country}.new
     }
 }
+
+### vestigal plugin model -  todo autoscan lib files for all languages ###
 
 class Contact::Address::USA does Contact::Address {
     has Str $.street;
