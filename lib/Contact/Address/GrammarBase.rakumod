@@ -14,7 +14,7 @@ role Contact::Address::GrammarBase {
     }
 
     token number {
-        \d ** 1..5
+        '#'? \d ** 1..5
     }
 
     token plain-words {
@@ -29,11 +29,9 @@ role Contact::Address::GrammarBase {
         @street-types
     }
 
-    token city    { <whole-line> }   #iamerejh
-
-    token town    { <whole-line> }
-    token county  { <whole-line> }
-    token country { <whole-line> }
+    token country {
+        <whole-line>
+    }
 
     token whole-line {
         ^^ \V* $$

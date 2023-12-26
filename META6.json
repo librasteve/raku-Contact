@@ -8,6 +8,7 @@
   ],
   "auth": "zef:librasteve",
   "depends": [
+    "Grammar::Tracer",
     "Data::Dump::Tree"
   ],
   "build-depends": [],

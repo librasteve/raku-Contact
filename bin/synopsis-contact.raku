@@ -11,18 +11,6 @@ my $text;
 #[
 $text = q:to/END/;
 John Doe,
-405 Union Ave.
-Middle Village, NY 11379
-END
-
-my $us-c = Contact.new: :$text, country => 'USA';
-ddt $us-c;
-say ~$us-c;
-#]
-
-#`[
-$text = q:to/END/;
-John Doe,
 123, Main St.,
 Springfield,
 IL 62704
@@ -33,7 +21,7 @@ ddt $us-c;
 say ~$us-c;
 #]
 
-#`[
+#[
 $text = q:to/END/;
 Dr. Jane Doe,
 Sleepy Cottage,

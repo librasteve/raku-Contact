@@ -1,28 +1,24 @@
 class X::Contact::Address::USA::CannotParse is Exception {
     has $.invalid-str;
-    method message() { "Unable to parse {$!invalid-str}" }
+    method message() { "Unable to parse...\n{$!invalid-str}" }
 }
 
-use Grammar::Tracer;
+#use Grammar::Tracer;
 class Contact::Address::USA::Parse {
     use Contact::Address::GrammarBase;
 
     grammar Grammar does Contact::Address::GrammarBase {
+        #<.ws> is [\h | \v] (allows city-state-zip on single line)
         token TOP {
                 <street>  \v
-#                <city>    \v
-#                <state> <.ws> <zip> \v?    #<.ws> is [\h* | \v]
-                <city> <.ws> <state> <.ws> <zip> \v?    #<.ws> is [\h* | \v]
+                <city>  <.ws> ','? <.ws>
+                <state> <.ws>
+                <zip> \v?
               [ <country> \v? ]?
         }
-
-        token state {
-                \w \w
-        }
-
-        token zip {
-                \d ** 5
-        }
+        token city  { <plain-words> }
+        token state { \w ** 2 }
+        token zip   { \d ** 5 }
     }
 
     class Actions {

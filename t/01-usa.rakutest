@@ -20,9 +20,7 @@ IL 62704
 Springfield,
 IL
 62704
-END
 
-#`[
 405 Union Ave.
 Middle Village, NY 11379
 
@@ -53,7 +51,6 @@ NY
 10003
 United States ofAmerica
 END
-#]
 
 my @addresses = $addresses.split(/\n\n+/);
 

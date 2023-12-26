@@ -1,6 +1,6 @@
 class X::Contact::Address::UK::CannotParse is Exception {
     has $.invalid-str;
-    method message() { "Unable to parse {$!invalid-str}" }
+    method message() { "Unable to parse...\n{$!invalid-str}" }
 }
 
 #use Grammar::Tracer;
@@ -17,9 +17,9 @@ class Contact::Address::UK::Parse {
               [ <country>      \v? ]?
         }
 
-        token house {
-                <plain-words>
-        }
+        token house  { <plain-words> }
+        token town   { <whole-line>  }
+        token county { <whole-line>  }
 
         token postcode {
                 \w [\w? | \d?]**2 <.ws>? \d \w \w
