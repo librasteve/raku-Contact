@@ -6,22 +6,22 @@ use Data::Dump::Tree;
 
 use Contact;
 
-my $text;
+my ( $country, $text );
 
-#`[
+#[
+$country = 'USA';
+
 $text = q:to/END/;
 John Doe,
 123, Main St.,
 Springfield,
 IL 62704
 END
-
-my $us-c = Contact.new: :$text, country => 'USA';
-ddt $us-c;
-say ~$us-c;
 #]
 
-#[
+#`[
+$country = 'UK';
+
 $text = q:to/END/;
 Dr. Jane Doe,
 Sleepy Cottage,
@@ -30,9 +30,12 @@ Henley-on-Thames,
 Oxon,
 RG9 2XX
 END
-
-my $uk-c = Contact.new: :$text, country => 'UK';
-ddt $uk-c;
-say ~$uk-c;
 #]
+
+my Contact $contact .= new: :$country, :$text;
+
+ddt  $contact;
+say ~$contact;
+
+
 
