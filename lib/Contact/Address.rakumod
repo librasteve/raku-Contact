@@ -28,7 +28,7 @@ role Contact::AddressFactory[Str $country='USA'] is export {
     }
 }
 
-### vestigal plugin model -  todo autoscan lib files for all languages ###
+### vestigal plugin model -  tbd autoscan lib files for all languages ###
 
 class Contact::Address::USA does Contact::Address {
     has Str $.street;
