@@ -1,11 +1,12 @@
+use JSON::Class:auth<zef:vrurg>;
 use Contact::Address;
 
-role Contact {
+role Contact is json {
     has Str     $.text is required;
     has Str     $.country is required where * eq <USA UK>.any;
 
-    has Str     $.name;
-    has Address $.address;
+    has Str     $.name is json;
+    has Address $.address is json;
     has Bool    $.is-company;
     has Str     $.company;
     has Str     @.email;

@@ -9,7 +9,8 @@
   "auth": "zef:librasteve",
   "depends": [
     "Grammar::Tracer",
-    "Data::Dump::Tree"
+    "Data::Dump::Tree",
+    "JSON::Class:auth<zef:vrurg>"
   ],
   "build-depends": [],
   "test-depends": [],
