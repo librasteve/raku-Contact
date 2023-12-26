@@ -1,40 +1,47 @@
+#use Grammar::Tracer;  #uncomment for debug
+use Contact::Address::GrammarBase;
+
 class X::Contact::Address::UK::CannotParse is Exception {
-    has $.invalid-str;
-    method message() { "Unable to parse...\n{$!invalid-str}" }
+    has $.address;
+    method message() { "Unable to parse...\n" ~ $!address }
 }
 
-#use Grammar::Tracer;
 class Contact::Address::UK::Parse {
-    use Contact::Address::GrammarBase;
+    has $.address is rw;
+    has @.attrs;
+    my  @battrs;   #will bind to @.attrs
 
-    grammar Grammar does Contact::Address::GrammarBase {
+    grammar Grammar does GrammarBase {
         token TOP {
               [ <house>        \v  ]?
                 <street>       \v
-                <town>         \v
-              [ <county>       \v  ]?
+                <town>         <.ws>
+              [ <county>       <.ws>]?
                 <postcode>     \v?
               [ <country>      \v? ]?
         }
 
-        token house  { <plain-words> }
-        token town   { <whole-line>  }
-        token county { <whole-line>  }
+        token house   { <nodt-words> }
+        token town    { <nodt-words> }
+        token county  { <nodt-words> }
+        token country { <whole-line> }
 
         token postcode {
-                \w [\w? | \d?]**2 <.ws>? \d \w \w
+                \w [\w? | \d?]**2 \d? <.ws>? \d \w \w
+        }
+
+        token nodt-word {
+            \S+ <?{ $/ !~~ /\d/ }>
+        }
+
+        token nodt-words {
+            <nodt-word>+ %% \h
         }
     }
 
     class Actions {
         method TOP($/) {
-            my @attrs = <house street town county postcode country>;
-
-            my %a;
-            for @attrs {
-                %a{$^key} = $_ with $/{$^key}.made
-            }
-            make %a
+            make-attrs($/, @battrs)
         }
 
         method house($/)    { make ~$/ }
@@ -43,13 +50,15 @@ class Contact::Address::UK::Parse {
         method county($/)   { make ~$/ }
         method postcode($/) { make ~$/ }
         method country($/)  { make ~$/ }
-
     }
 
-    method new(Str $address is rw, :$rule = 'TOP') {
-        Grammar.parse(prep($address), :$rule, :actions(Actions))
-            or X::Contact::Address::UK::CannotParse.new( invalid-str => $address ).throw;
+    method TWEAK {
+        @battrs := @!attrs;
+    }
+
+    method parse {
+        Grammar.parse($!address.&prep, :actions(Actions))
+                or X::Contact::Address::UK::CannotParse.new(:$!address).throw;
         $/.made
     }
 }
-

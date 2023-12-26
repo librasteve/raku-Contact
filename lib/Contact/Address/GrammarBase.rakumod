@@ -1,3 +1,5 @@
+### helper subroutines ###
+
 sub prep($address is rw) is export {
     $address ~~ s:g/','$$//;
     $address ~~ s:g/<['\%]>//;
@@ -5,32 +7,37 @@ sub prep($address is rw) is export {
     $address
 }
 
-role Contact::Address::GrammarBase {
+sub make-attrs($match, @attrs) is export {
+    my %a;
+    for @attrs {
+        %a{$^key} = $_ with $match{$^key}.made
+    }
+    $match.make( %a )
+}
+
+### common values & tokens ###
+role GrammarBase {
     ### Anglophile
     my @street-types = <Street St Avenue Ave Av Road Rd Lane Ln Boulevard Blvd>;
 
-    token street {
-        ^^ [<number> ','? <.ws>]? <plain-words> <.ws> <street-type> '.'? $$
+    token street-type {
+        @street-types
     }
 
     token number {
         '#'? \d ** 1..5
     }
 
-    token plain-words {
-        <plain-word>+ % \h
-    }
-
-    token plain-word {
+    token nost-word {
         \w+  <?{ $/ ne @street-types.any }>
     }
 
-    token street-type {
-        @street-types
+    token nost-words {
+        <nost-word>+ %% \h
     }
 
-    token country {
-        <whole-line>
+    token street {
+        ^^ [<number> ','? <.ws>]? <nost-words> [<.ws> <street-type> '.'?]? $$
     }
 
     token whole-line {

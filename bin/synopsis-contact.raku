@@ -8,7 +8,7 @@ use Contact;
 
 my $text;
 
-#[
+#`[
 $text = q:to/END/;
 John Doe,
 123, Main St.,

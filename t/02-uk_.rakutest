@@ -1,7 +1,8 @@
 use v6.d;
 use Test;
 
-say 'yo';
+use lib '../lib';
+use Contact::Address;
 
 my $addresses = q:to/END/;
 Sleepy Cottage,
@@ -44,12 +45,21 @@ Scotland
 88 Kingsway
 London
 WC50 8KD
+
+123 Quick Road
+London
+W4 2XX
 END
 
 my @addresses = $addresses.split(/\n\n+/);
 
-for @addresses -> $address {
+for @addresses -> $address is rw {
     say $address.trim;
+
+    my $res;
+
+    lives-ok {$res = AddressFactory['UK'].new.parse: $address} ,  'lives-ok';
+    say $res;
     say '---';
 }
 

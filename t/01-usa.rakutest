@@ -4,8 +4,6 @@ use Test;
 use lib '../lib';
 use Contact::Address;
 
-say 'yo';
-
 my $addresses = q:to/END/;
 123, Main St.,
 Springfield,
