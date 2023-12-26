@@ -1,5 +1,4 @@
 ### common roles for Contact::Address classes ###
-
 role Contact::Address is export {
     method parse(Str $) {...}
 

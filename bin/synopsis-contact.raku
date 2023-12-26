@@ -4,6 +4,7 @@ use v6.d;
 use lib '../lib';
 use Data::Dump::Tree;
 
+
 use Contact;
 
 my ( $country, $text );
