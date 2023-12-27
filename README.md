@@ -2,11 +2,56 @@
 
 # Contact
 
-This is a preview of a possible new raku module. It is featured in the https://raku-advent.blog/ and as stated there:
+## Synopsis
 
-_This code is intended to make it's way into a new raku Contact module ... that's work in progress for now, but you are welcome to view / raise issues / make PRs if you would like to contribute..._
+```raku
+#!/usr/bin/env raku
+use v6.d;
+
+use lib '../lib';
+use Data::Dump::Tree;
+
+use Contact;
+
+my ( $country, $text );
+
+#[
+$country = 'USA';
+
+$text = q:to/END/;
+John Doe,
+123, Main St.,
+Springfield,
+IL 62704
+END
+#]
+
+#[
+$country = 'UK';
+
+$text = q:to/END/;
+Dr. Jane Doe,
+Sleepy Cottage,
+123, Badgemore Lane,
+Henley-on-Thames,
+Oxon,
+RG9 2XX
+END
+#]
+
+my Contact $contact .= new: :$country, :$text;
+
+ddt  $contact;
+say ~$contact;
+say  $contact.to-json;
+```
+
+_you are welcome to view / raise issues / make PRs if you would like to contribute..._
 
 ### TODOs
+
+- [ ] add Email::Address (dependency)
+- [ ] add more countries (GE, FR ...)
 
 ### Copyright
 copyright(c) 2023 Henley Cloud Consulting Ltd.

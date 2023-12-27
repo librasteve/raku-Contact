@@ -3,7 +3,6 @@ use v6.d;
 
 use lib '../lib';
 use Data::Dump::Tree;
-use JSON::Class:auth<zef:vrurg>;
 
 use Contact;
 
@@ -20,7 +19,7 @@ IL 62704
 END
 #]
 
-#`[
+#[
 $country = 'UK';
 
 $text = q:to/END/;
@@ -35,6 +34,7 @@ END
 
 my Contact $contact .= new: :$country, :$text;
 
+ddt  $contact;
 say ~$contact;
 say  $contact.to-json;
 
