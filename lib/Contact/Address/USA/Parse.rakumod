@@ -23,7 +23,7 @@ class Contact::Address::USA::Parse {
 
         token city    { <nost-words> }
         token state   { \w ** 2 }
-        token zip     { \d ** 5 }
+        token zip     { \d ** 5 ('-' \d ** 4)? }
         token country { <whole-line> }
     }
 
